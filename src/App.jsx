@@ -31,6 +31,8 @@ function App() {
     },
   };
 
+  /*
+
   const newObj = {};
   const deepCopy = (val) => {
     console.log("=== val", val)
@@ -65,13 +67,51 @@ function App() {
   obj.f["m"] = "vasant";
 
   console.log("obj2", obj2);
+
+  */
+
+  const deepCopy = (val) => {
+    if (val === null || typeof val !== "object") {
+      return val;
+    }
+
+    if (typeof val === "function") {
+      return val;
+    }
+
+    if (Array.isArray(val)) {
+      const arr = [];
+      val.forEach((item, i) => {
+        arr[i] = deepCopy(item);
+      });
+      return arr;
+    }
+
+    if (typeof val === "object") {
+      const obj = {};
+      for (let key in val) {
+        obj[key] = deepCopy(val[key]);
+      }
+
+      return obj;
+    }
+  };
+
+  const result = deepCopy(obj);
+
+  obj.d[2] = 9;
+  obj.d[3] = 29;
+  obj.f["m"] = "vasant";
+  
+  console.log(result);
+
   return (
     <>
       {/* <Signal /> */}
       {/* <Password /> */}
 
       <pre>{JSON.stringify(obj)}</pre>
-      <pre>{JSON.stringify(obj2)}</pre>
+      <pre>{JSON.stringify(result)}</pre>
     </>
   );
 }
