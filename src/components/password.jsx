@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useGeneratePassword from "../hooks/useGeneratePassword";
 
 function Password({ min = 4, max = 20 }) {
   const [range, setRange] = useState(min);
+  const [copied, setCopied] = useState(false);
   const [selectedCheckboxes, setSelectedCheckboxes] = useState([
     {
       name: "numbers",
@@ -26,15 +27,30 @@ function Password({ min = 4, max = 20 }) {
     },
   ]);
 
+  useEffect(() => {
+    const copyTimer = setTimeout(() => {
+      setCopied(false);
+    }, 1000);
+
+    return () => clearTimeout(copyTimer);
+  }, [copied]);
+
   const { password, generatePassword } = useGeneratePassword(
     selectedCheckboxes,
     range
   );
 
-  const handleSelect = (e, index) => {
+  const isDisabled = selectedCheckboxes.some((checkbox) => checkbox.selected);
+
+  const handleSelect = (index) => {
     const temp = [...selectedCheckboxes];
     temp[index].selected = !temp[index].selected;
     setSelectedCheckboxes(temp);
+  };
+
+  const handleCopy = async () => {
+    await window.navigator.clipboard.writeText(password);
+    setCopied(true);
   };
 
   return (
@@ -64,7 +80,7 @@ function Password({ min = 4, max = 20 }) {
                   name={name}
                   id={name}
                   checked={selected}
-                  onChange={(e) => handleSelect(e, index)}
+                  onChange={() => handleSelect(index)}
                 />
                 <label htmlFor={name}>{label}</label>
               </div>
@@ -74,7 +90,14 @@ function Password({ min = 4, max = 20 }) {
       </div>
 
       <div className="generate-password-btn">
-        <button onClick={generatePassword}>Generate Password</button>
+        <button disabled={!isDisabled} onClick={generatePassword}>
+          Generate Password
+        </button>
+        {password && (
+          <button onClick={handleCopy} className="copy">
+            {copied ? "Copied" : "Copy"}
+          </button>
+        )}
       </div>
 
       {password && (

@@ -53,6 +53,11 @@
   align-items: center;
 }
 
+.generate-password-btn {
+  display: flex;
+  justify-content: space-around;
+}
+
 .generate-password-btn button {
   margin-top: 1rem;
   padding: 0.5rem;
