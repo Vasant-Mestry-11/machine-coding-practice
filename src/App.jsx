@@ -106,7 +106,7 @@ function App() {
 
   console.log(result);
 
-  const bars = [ 100];
+  const bars = [5, 10, 25, 50, 70, 100];
 
   return (
     <div>
