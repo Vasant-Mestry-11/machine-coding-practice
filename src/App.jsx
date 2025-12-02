@@ -1,5 +1,6 @@
 import "./App.css";
 import Password from "./components/password";
+import ProgressBar from "./components/ProgressBar";
 import Signal from "./components/signal";
 
 /*
@@ -102,17 +103,23 @@ function App() {
   obj.d[2] = 9;
   obj.d[3] = 29;
   obj.f["m"] = "vasant";
-  
+
   console.log(result);
 
+  const bars = [ 100];
+
   return (
-    <>
+    <div>
       {/* <Signal /> */}
       {/* <Password /> */}
 
-      <pre>{JSON.stringify(obj)}</pre>
-      <pre>{JSON.stringify(result)}</pre>
-    </>
+      {/* <pre>{JSON.stringify(obj)}</pre>
+      <pre>{JSON.stringify(result)}</pre> */}
+
+      {bars.map((value) => (
+        <ProgressBar progress={value} key={value} />
+      ))}
+    </div>
   );
 }
 
