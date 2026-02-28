@@ -55,10 +55,20 @@ const CHECKBOX_DATA = [
 const NestedCheckbox = () => {
   const [checked, setChecked] = useState({});
 
-  const handleCheckboxClick = (id) => {
+  const handleCheckboxClick = (node, isChecked) => {
     setChecked((prev) => {
       const newState = { ...prev };
-      newState[id] = !prev[id];
+
+      const updateChildren = (ele) => {
+        newState[ele.id] = isChecked;
+        ele.children.forEach((child) => {
+          newState[child.id] = isChecked;
+          child.children && updateChildren(child);
+        });
+      };
+
+      updateChildren(node);
+
       return newState;
     });
   };

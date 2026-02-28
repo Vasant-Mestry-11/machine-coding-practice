@@ -1,18 +1,18 @@
 const Checkboxes = ({ checked, handleCheckboxClick, data }) => {
   return (
     <div className="checkbox__main">
-      {data.map(({ id, name, children }) => (
-        <div className="parent" key={id}>
+      {data.map((node) => (
+        <div className="parent" key={node.id}>
           <input
             type="checkbox"
-            id={id}
-            onChange={() => handleCheckboxClick(id)}
-            checked={checked[id] || false}
+            id={node.id}
+            onChange={(e) => handleCheckboxClick(node, e.target.checked)}
+            checked={checked[node.id] || false}
           />
-          <label htmlFor={id}>{name}</label>
-          {children && (
+          <label htmlFor={node.id}>{node.name}</label>
+          {node.children && (
             <Checkboxes
-              data={children}
+              data={node.children}
               handleCheckboxClick={handleCheckboxClick}
               checked={checked}
             />
