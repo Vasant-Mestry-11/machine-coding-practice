@@ -63,3 +63,8 @@
   padding: 0.5rem;
   outline: none;
 }
+
+
+.parent {
+  padding-left: 20px;
+}

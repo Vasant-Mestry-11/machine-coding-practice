@@ -1,4 +1,5 @@
 import "./App.css";
+import NestedCheckbox from "./components/NestedCheckbox";
 // import Password from "./components/password";
 import ProgressBar from "./components/ProgressBar";
 // import Signal from "./components/signal";
@@ -119,6 +120,8 @@ function App() {
       {/* {bars.map((value) => (
         <ProgressBar progress={value} key={value} />
       ))} */}
+
+      <NestedCheckbox />
     </div>
   );
 }
