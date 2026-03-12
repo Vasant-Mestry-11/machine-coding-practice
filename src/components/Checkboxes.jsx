@@ -1,4 +1,4 @@
-const Checkboxes = ({ checked, handleCheckboxClick, data }) => {
+const Checkboxes = ({ checked, handleCheckboxClick, data, parentMap }) => {
   return (
     <div className="checkbox__main">
       {data.map((node) => (
@@ -15,6 +15,7 @@ const Checkboxes = ({ checked, handleCheckboxClick, data }) => {
               data={node.children}
               handleCheckboxClick={handleCheckboxClick}
               checked={checked}
+              parentMap={parentMap}
             />
           )}
         </div>

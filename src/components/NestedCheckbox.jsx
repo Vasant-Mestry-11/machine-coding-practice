@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Checkboxes from "./Checkboxes";
 
 const CHECKBOX_DATA = [
@@ -55,13 +55,25 @@ const CHECKBOX_DATA = [
 const NestedCheckbox = () => {
   const [checked, setChecked] = useState({});
 
+  const buildParentMap = (data, parent = null, map = {}) => {
+    data.forEach((node) => {
+      map[node.id] = parent;
+      if (node.children.length > 0) {
+        buildParentMap(node.children, node, map);
+      }
+    });
+    return map;
+  };
+
+  const parentMap = useMemo(() => buildParentMap(CHECKBOX_DATA), []);
+  console.log("parentMap", parentMap);
+
   const handleCheckboxClick = (node, isChecked) => {
     setChecked((prev) => {
-      const newState = { ...prev };
+      const newState = { ...prev, [node.id]: isChecked };
 
-      const updateChildren = (ele) => {
-        newState[ele.id] = isChecked;
-        ele.children.forEach((child) => {
+      const updateChildren = (node) => {
+        node.children?.forEach((child) => {
           newState[child.id] = isChecked;
           child.children && updateChildren(child);
         });
@@ -69,6 +81,20 @@ const NestedCheckbox = () => {
 
       updateChildren(node);
 
+      // if all childrens are checked, mark the parent as checked
+
+      const checkAncestor = (currentNode) => {
+        const parent = parentMap[currentNode.id];
+        if (!parent) return;
+        const isChildChecked = currentNode.children.every(
+          (child) => newState[child.id],
+        );
+        newState[currentNode.id] = isChildChecked;
+        console.log("========== parent", parent)
+        checkAncestor(parent);
+      };
+
+      checkAncestor(node);
       return newState;
     });
   };
@@ -81,6 +107,7 @@ const NestedCheckbox = () => {
         data={CHECKBOX_DATA}
         checked={checked}
         handleCheckboxClick={handleCheckboxClick}
+        parentMap={parentMap}
       />
     </div>
   );
